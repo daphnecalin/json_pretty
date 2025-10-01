@@ -339,6 +339,50 @@ StatusOr<ColumnPtr> JsonFunctions::parse_json(FunctionContext* context, const Co
     return result.build(ColumnHelper::is_all_const(columns));
 }
 
+StatusOr<ColumnPtr> JsonFunctions::json_pretty(FunctionContext* context, const Columns& columns) {
+    ColumnViewer<TYPE_JSON> viewer(columns[0]);
+    ColumnBuilder<TYPE_VARCHAR> result(columns[0]->size());
+
+    for (int row = 0; row < columns[0]->size(); row++) {
+        if (viewer.is_null(row)) {
+            result.append_null();
+        } else {
+            JsonValue* json = viewer.value(row);
+            auto json_str = json->to_string();
+            if (!json_str.ok()) {
+                result.append_null();
+            } else {
+                int indent = 0;
+                std::string pretty_result = "";
+                for (auto x : json_str) {
+                    if (x == '{' || x == '[') {
+                        indent += 1;
+                        pretty_result.push_back(x);
+                        pretty_result.push_back('\n');
+                        pretty_result.append(indent, '\t');
+                    } else if (x == '}' || x == ']') {
+                        indent -= 1;
+                        pretty_result.push_back('\n');
+                        pretty_result.append(indent, '\t');
+                        pretty_result.push_back(x);
+                    } else if (x == ',') {
+                        pretty_result.push_back(x);
+                        pretty_result.push_back('\n');
+                        pretty_result.append(indent, '\t');
+                    } else if (x == ':') {
+                        pretty_result.push_back(x);
+                        pretty_result.push_back(' ');
+                    } else {
+                        pretty_result.push_back(x);
+                    }
+                }
+                result.append(pretty_result.value());
+            }
+        }
+    }
+    return result.build(ColumnHelper::is_all_const(columns));
+}
+
 StatusOr<ColumnPtr> JsonFunctions::json_string(FunctionContext* context, const Columns& columns) {
     ColumnViewer<TYPE_JSON> viewer(columns[0]);
     ColumnBuilder<TYPE_VARCHAR> result(columns[0]->size());

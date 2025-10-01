@@ -97,6 +97,13 @@ public:
     DEFINE_VECTORIZED_FN(parse_json);
 
     /**
+     * @param: [json_object]
+     * @paramType: [JsonColumn]
+     * @return: BinaryColumn
+     */
+    DEFINE_VECTORIZED_FN(json_pretty);
+
+    /**
      * @param: [json_column]
      * @paramType: [JsonColumn]
      * @return: BinaryColumn
