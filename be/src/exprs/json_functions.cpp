@@ -354,7 +354,7 @@ StatusOr<ColumnPtr> JsonFunctions::json_pretty(FunctionContext* context, const C
             } else {
                 int indent = 0;
                 std::string pretty_result = "";
-                for (auto x : json_str) {
+                for (auto x : json_str.value()) {
                     if (x == '{' || x == '[') {
                         indent += 1;
                         pretty_result.push_back(x);
@@ -376,7 +376,7 @@ StatusOr<ColumnPtr> JsonFunctions::json_pretty(FunctionContext* context, const C
                         pretty_result.push_back(x);
                     }
                 }
-                result.append(pretty_result.value());
+                result.append(pretty_result);
             }
         }
     }
