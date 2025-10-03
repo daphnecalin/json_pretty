@@ -863,7 +863,6 @@ vectorized_functions = [
     [110004, "json_string", False, True, "VARCHAR", ["JSON"], "JsonFunctions::json_string"],
     [110005, "json_query", False, False, "JSON", ["JSON", "VARCHAR"], "JsonFunctions::json_query",
      "JsonFunctions::native_json_path_prepare", "JsonFunctions::native_json_path_close"],
-    [110006, "json_pretty", False, True, "VARCHAR", ["JSON"], "JsonFunctions::json_pretty"],
     # [110006, "json_value", "JSON", ["JSON", "VARCHAR"], "JsonFunctions::json_query"],
     [110007, "json_exists", False, False, "BOOLEAN", ["JSON", "VARCHAR"], "JsonFunctions::json_exists",
      "JsonFunctions::native_json_path_prepare", "JsonFunctions::native_json_path_close"],
