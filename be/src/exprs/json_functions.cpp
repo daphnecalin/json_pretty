@@ -343,6 +343,8 @@ StatusOr<ColumnPtr> JsonFunctions::json_pretty(FunctionContext* context, const C
     ColumnViewer<TYPE_JSON> viewer(columns[0]);
     ColumnBuilder<TYPE_VARCHAR> result(columns[0]->size());
 
+	result.reserve(columns[0]->size());
+
     for (int row = 0; row < columns[0]->size(); row++) {
         if (viewer.is_null(row)) {
             result.append_null();
@@ -354,6 +356,7 @@ StatusOr<ColumnPtr> JsonFunctions::json_pretty(FunctionContext* context, const C
             } else {
                 int indent = 0;
                 std::string pretty_result = "";
+				pretty_result.reserve(input.size() * 2);
                 for (auto x : json_str.value()) {
                     if (x == '{' || x == '[') {
                         indent += 1;
