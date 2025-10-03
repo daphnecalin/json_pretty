@@ -353,22 +353,22 @@ StatusOr<ColumnPtr> JsonFunctions::json_pretty(FunctionContext* context, const C
                 result.append_null();
             } else {
                 int indent = 0;
-                std::string pretty_result = "";
+                std::string pretty_result = "\n";
                 for (auto x : json_str.value()) {
                     if (x == '{' || x == '[') {
-                        indent += 1;
+                        indent += 2;
                         pretty_result.push_back(x);
                         pretty_result.push_back('\n');
-                        pretty_result.append(indent, '\t');
+                        pretty_result.append(indent, ' ');
                     } else if (x == '}' || x == ']') {
-                        indent -= 1;
+                        indent -= 2;
                         pretty_result.push_back('\n');
-                        pretty_result.append(indent, '\t');
+                        pretty_result.append(indent, ' ');
                         pretty_result.push_back(x);
                     } else if (x == ',') {
                         pretty_result.push_back(x);
                         pretty_result.push_back('\n');
-                        pretty_result.append(indent, '\t');
+                        pretty_result.append(indent, ' ');
                     } else if (x == ':') {
                         pretty_result.push_back(x);
                         pretty_result.push_back(' ');
@@ -376,6 +376,7 @@ StatusOr<ColumnPtr> JsonFunctions::json_pretty(FunctionContext* context, const C
                         pretty_result.push_back(x);
                     }
                 }
+				pretty_result.push_back('\n');
                 result.append(pretty_result);
             }
         }
