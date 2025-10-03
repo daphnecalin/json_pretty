@@ -21,15 +21,15 @@
 
 #include <string>
 
-#include "cache/block_cache/block_cache_hit_rate_counter.hpp"
-#include "cache/local_cache_engine.h"
+#include "cache/disk_cache/block_cache_hit_rate_counter.hpp"
+#include "cache/disk_cache/local_disk_cache_engine.h"
 #include "http/http_channel.h"
 #include "http/http_headers.h"
 #include "http/http_request.h"
 #include "http/http_status.h"
 
 #ifdef WITH_STARCACHE
-#include "cache/starcache_engine.h"
+#include "cache/disk_cache/starcache_engine.h"
 #endif
 
 namespace starrocks {
@@ -58,8 +58,6 @@ void DataCacheAction::handle(HttpRequest* req) {
     }
     if (!_local_cache || !_local_cache->is_initialized()) {
         _handle_error(req, strings::Substitute("Cache system is not ready"));
-    } else if (_local_cache->engine_type() != LocalCacheEngineType::STARCACHE) {
-        _handle_error(req, strings::Substitute("No more metrics for current cache engine type"));
     } else if (req->param(ACTION_KEY) == ACTION_STAT) {
         _handle_stat(req);
     } else {
