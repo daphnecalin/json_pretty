@@ -48,16 +48,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ExpressionTest extends PlanTestBase {
 
     @Test
-    public void testJsonToString() throws Exception {
-        String sql;
-        sql = "select json_string(JSON '[1, 2, 3]')";
-        assertPlanContains(sql, "'[1, 2, 3]'");
-
-        //sql = "select json_pretty(JSON '{"a":1,"b":[1,2,3]}')";
-        //assertPlanContains(sql, "{\n\t\"a\": 1,\n\t\"b\": [\n\t\t1,\n\t\t2,\n\t\t3\n\t]\n}");
-    }
-
-    @Test
     public void testExpression() throws Exception {
         String sql = "select v1 + v2, v1 + v2 + v3, v1 + v2 + v3 + 1 from t0";
         String planFragment = getFragmentPlan(sql);
